@@ -6,48 +6,11 @@
 
 using namespace std;
 
-
-int main1() {
-
-    setlocale(LC_ALL, "Russian");
-
-    string filePath;
-    string searchWord;
-    string word;
-    int count = 0;
-
-    cout << "Введите путь к файлу: ";
-    cin >> filePath;
-
-    cout << "Введите слово для поиска: ";
-    cin >> searchWord;
-
-    ifstream file(filePath);
-
-    if (!file.is_open()) {
-        cerr << "Ошибка при открытии файла." << endl;
-        return 1;
-    }
-
-    while (file >> word) {
-        if (word == searchWord) {
-            ++count;
-        }
-    }
-
-    file.close();
-
-    cout << "Слово \\"" << searchWord << \\"" встречается в файле " << count << " раз." << endl;
-
-    return 0;
-}
-
-
 struct Book {
     string id;
     string author;
     string title;
-    int pages;
+    int pages{};
 };
 
 void printMenu() {
@@ -59,7 +22,8 @@ void printMenu() {
     cout << "3. Удалить книгу" << endl;
     cout << "4. Найти книгу" << endl;
     cout << "5. Редактировать книгу" << endl;
-    cout << "6. Выйти" << endl;
+    cout << "6. Найти слово" << endl;
+    cout << "7. Выйти" << endl;
 }
 
 vector<Book> readBooksFromFile(const string& filename) {
@@ -197,6 +161,40 @@ void editBook(vector<Book>& books) {
     }
 }
 
+int findWord() {
+    setlocale(LC_ALL, "Russian");
+
+    string filePath;
+    string searchWord;
+    string word;
+    int count = 0;
+
+    cout << "Введите путь к файлу: ";
+    cin >> filePath;
+
+    cout << "Введите слово для поиска: ";
+    cin >> searchWord;
+
+    ifstream file(filePath);
+
+    if (!file.is_open()) {
+        cerr << "Ошибка при открытии файла." << endl;
+        return 1;
+    }
+
+    while (file >> word) {
+        if (word == searchWord) {
+            ++count;
+        }
+    }
+
+    file.close();
+
+    cout << "Слово \\""<< searchWord <<\\"" встречается в файле " << count << " раз." << endl;
+
+    return 0;
+}
+
 int main() {
     vector<Book> books = readBooksFromFile("books.txt");
 
@@ -223,6 +221,9 @@ int main() {
             editBook(books);
             break;
         case 6:
+            findWord();
+            break;
+        case 7:
             writeBooksToFile(books, "books.txt");
             cout << "Программа завершена." << endl;
             break;
